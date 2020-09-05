@@ -20,5 +20,3 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg; \
     	docker-php-ext-enable imagick;
 
 WORKDIR /app
-
-RUN chown -R www-data:www-data /app

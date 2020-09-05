@@ -3,7 +3,7 @@ version: "3.3"
 services:
   server:
     build:
-      context: docker/nginx
+      context: ./docker/nginx
     volumes:
       - ./wordpress:/app
       #- ./nginx-conf:/etc/nginx/conf.d
@@ -15,21 +15,29 @@ services:
 
   php-fpm:
     build:
-      context: docker/php-fpm
+      context: ./docker/php-fpm
     volumes:
       - ./wordpress:/app
 
   php-cli:
     build:
-      context: docker/php-cli
+      context: ./docker/php-cli
     volumes:
       - ./wordpress:/app
 
+  wp-cli:
+    build:
+      context: ./docker/wp-cli
+    depends_on:
+      - php-fpm
+    volumes:
+    - ./wordpress:/app
+
   database:
     build:
-      context: docker/mariadb
+      context: ./docker/mariadb
     volumes:
-      - ./docker/databases/mariadb:/var/lib/mariadb
+      - ./docker/databases/mariadb:/var/lib/mysql
     environment:
       - MYSQL_ROOT_USER=${DB_ROOT_USER}
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
@@ -40,7 +48,8 @@ services:
       - "3306:3306"
 
   phpadmin:
-    image: phpmyadmin/phpmyadmin
+    build:
+      context: ./docker/phpmyadmin
     links:
       - database
     environment:

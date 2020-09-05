@@ -3,8 +3,10 @@
 ########################################################################
 
 build:
+	docker-compose build --no-cache
+
+build-with-cache:
 	docker-compose build
-#--no-cache
 
 up:
 	docker-compose up -d
@@ -12,21 +14,22 @@ up:
 down:
 	docker-compose down
 
-
 ########################################################################
 #######################           SERVER        ########################
 ########################################################################
 
-server:
+server-console:
 	docker-compose run --rm --no-deps server sh
 
 ########################################################################
 #########################           PHP        #########################
 ########################################################################
 
-php-cli:
+php-cli-console:
 	docker-compose run --rm --no-deps php-cli bash
 
+wp-cli-console:
+	docker-compose run --rm --no-deps wp-cli bash
 
 ################################################################
 ####################### LOGS/CACHE #############################
@@ -37,3 +40,10 @@ logs-docker:
 
 dump-autoload:
 	docker-compose run --rm --no-deps php-cli composer dump-autoload
+
+################################################################
+######################### OTHER ################################
+################################################################
+
+set-access:
+	sudo chown -R www-data:www-data ./wordpress
