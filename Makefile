@@ -18,8 +18,15 @@ down:
 #######################           SERVER        ########################
 ########################################################################
 
-server-console:
-	docker-compose run --rm --no-deps server sh
+gateway-console:
+	docker-compose run --rm --no-deps gateway sh
+
+laravel-console:
+	docker-compose run --rm --no-deps laravel sh
+
+wordpress-console:
+	docker-compose run --rm --no-deps wordpress sh
+
 
 ########################################################################
 #########################           PHP        #########################

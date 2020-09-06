@@ -1,29 +1,51 @@
 version: "3.3"
 
 services:
-  server:
+
+  gateway:
     build:
-      context: ./docker/nginx
-    volumes:
-      - ./wordpress:/app
-      #- ./nginx-conf:/etc/nginx/conf.d
-      #- certbot-etc:/etc/letsencrypt
+      context: ./docker/server/gateway
     ports:
       - "80:80"
     depends_on:
-      - php-fpm
+      - laravel
+      - wordpress
+
+  laravel:
+    build:
+      context: ./docker/server/laravel
+    volumes:
+      - ./src/laravel:/app
+
+  wordpress:
+    build:
+      context: ./docker/server/wordpress
+    volumes:
+      - ./src/wordpress:/app
+
+        #  server:
+        #    build:
+        #      context: ./docker/nginx
+        #    volumes:
+        #      - ./src:/app
+      #- ./nginx-conf:/etc/nginx/conf.d
+      #- certbot-etc:/etc/letsencrypt
+  #    ports:
+  #      - "80:80"
+  #    depends_on:
+  #      - php-fpm
 
   php-fpm:
     build:
       context: ./docker/php-fpm
     volumes:
-      - ./wordpress:/app
+      - ./src:/app
 
   php-cli:
     build:
       context: ./docker/php-cli
     volumes:
-      - ./wordpress:/app
+      - ./src:/app
 
   wp-cli:
     build:
@@ -31,7 +53,7 @@ services:
     depends_on:
       - php-fpm
     volumes:
-    - ./wordpress:/app
+      - ./src/wordpress:/app
 
   database:
     build:
